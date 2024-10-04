@@ -10,8 +10,8 @@ import * as fs from 'fs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { TransformInterceptor } from './common/interceptors';
-import { HttpExceptionFilter } from './common/filters';
+import { TransformInterceptor } from './shared/interceptors';
+import { HttpExceptionFilter } from './shared/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -19,6 +19,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const isProduction = configService.getOrThrow<string>('NODE_ENV') === 'production';
+
+  app.setViewEngine('hbs');
 
   app.useGlobalInterceptors(new TransformInterceptor());
 

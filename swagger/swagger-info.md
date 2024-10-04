@@ -1,4 +1,4 @@
-# Restful API Server Documentation
+# Your Wavelength Documentation
 
 ### 📚 버전 정보
 

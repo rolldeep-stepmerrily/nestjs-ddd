@@ -4,7 +4,7 @@ import Joi from 'joi';
 
 import { PrismaModule } from './infrastructure/database/prisma.module';
 import { HttpLoggerMiddleware } from './common/middlewares';
-import { AppController } from './app.controller';
+import { AppController } from './application/controllers/app.controller';
 import { ConfigProviderModule } from './common/config-provider';
 
 @Module({

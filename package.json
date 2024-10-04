@@ -1,5 +1,5 @@
 {
-  "name": "rolldeep-nestjs-starter",
+  "name": "your-wavelength",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -13,7 +13,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:generate": "prisma generate --schema=./src/infrastructure/database/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=./src/infrastructure/database/prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema=./src/infrastructure/database/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema=./src/infrastructure/database/prisma/schema.prisma"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.3",

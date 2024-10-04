@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  likes     Song[]     @relation("UserLikes")
+  playlists Playlist[]
+}
+
+model Song {
+  id          Int       @id @default(autoincrement())
+  artistId    Int
+  genreId     Int
+  title       String
+  description String?
+  duration    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  artist    Artist     @relation(fields: [artistId], references: [id])
+  genre     Genre      @relation(fields: [genreId], references: [id])
+  likedBy   User[]     @relation("UserLikes")
+  playlists Playlist[] @relation("PlaylistSongs")
+}
+
+model Artist {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  songs Song[]
+}
+
+model Genre {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  songs Song[]
+}
+
+model Playlist {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  user  User   @relation(fields: [userId], references: [id])
+  songs Song[] @relation("PlaylistSongs")
+}

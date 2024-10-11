@@ -9,7 +9,7 @@ export class EmailService {
     try {
       return await this.mailerService.sendMail({
         to: email,
-        subject: '[Your Wavelength] 이메일 인증 코드 입니다.',
+        subject: '[nestjs-ddd] 이메일 인증 코드 입니다.',
         template: 'verification',
         context: { code },
       });

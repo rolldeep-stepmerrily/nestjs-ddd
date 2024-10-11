@@ -15,9 +15,9 @@ import { join } from 'path';
 
         return {
           transport: { host: 'smtp.daum.net', port: 465, auth: { user, pass } },
-          defaults: { from: 'Your Wavelength <rolldeep@stepmerrily.com>' },
+          defaults: { from: 'nestjs-ddd <rolldeep@stepmerrily.com>' },
           template: {
-            dir: join(__dirname, '..', '..', 'templates'),
+            dir: join(__dirname, '..', 'templates'),
             adapter: new HandlebarsAdapter(),
             options: { strict: true },
           },

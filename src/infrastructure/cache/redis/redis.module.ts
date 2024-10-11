@@ -5,6 +5,7 @@ import { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-yet';
 
 import { RedisService } from './redis.service';
+import { RedisRepository } from './repositories/redis.repository';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { RedisService } from './redis.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [RedisService],
+  providers: [RedisService, RedisRepository],
   exports: [RedisService],
 })
 export class RedisModule {}

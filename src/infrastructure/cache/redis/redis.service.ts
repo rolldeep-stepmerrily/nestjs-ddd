@@ -1,41 +1,50 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { RedisRepository } from './repositories/redis.repository';
+
+interface IEmailVerification {
+  email: string;
+  verificationCode: string;
+  count: number;
+  isComplete: boolean;
+}
 
 @Injectable()
 export class RedisService {
-  constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-    @Inject('SERVER_URL') private readonly serverUrl: string,
-  ) {}
+  private readonly EMAIL_VERIFICATION_ENDPOINT = 'api/users/email-verification/request';
+  private readonly MAX_EMAIL_VERIFICATION_COUNT = 5;
 
-  async set(key: string, value: any): Promise<void> {
-    try {
-      await this.cacheManager.set(`${this.serverUrl}/${key}`, value);
-    } catch (e) {
-      console.error(e);
+  constructor(private readonly redisRepository: RedisRepository) {}
 
-      throw new InternalServerErrorException('set error');
-    }
+  async getEmailVerificationData(email: string): Promise<IEmailVerification | null> {
+    return await this.redisRepository.get<IEmailVerification>(`${this.EMAIL_VERIFICATION_ENDPOINT}:${email}`);
   }
 
-  async get<T>(key: string): Promise<T | null> {
-    try {
-      return (await this.cacheManager.get<T>(`${this.serverUrl}/${key}`)) ?? null;
-    } catch (e) {
-      console.error(e);
+  async setEmailVerificationData(email: string, verificationCode: string): Promise<void> {
+    const verificationData = await this.getEmailVerificationData(email);
 
-      throw new InternalServerErrorException('get error');
+    if (verificationData && verificationData.count >= this.MAX_EMAIL_VERIFICATION_COUNT) {
+      throw new ForbiddenException('인증 횟수를 초과하였습니다.');
     }
+
+    const newVerificationData: IEmailVerification = {
+      email,
+      verificationCode,
+      count: verificationData?.count ? verificationData.count + 1 : 1,
+      isComplete: false,
+    };
+
+    await this.redisRepository.set(`${this.EMAIL_VERIFICATION_ENDPOINT}:${email}`, newVerificationData);
   }
 
-  async delete(key: string): Promise<void> {
-    try {
-      await this.cacheManager.del(`${this.serverUrl}/${key}`);
-    } catch (e) {
-      console.error(e);
+  async completeEmailVerification(email: string): Promise<void> {
+    const verificationData = await this.getEmailVerificationData(email);
 
-      throw new InternalServerErrorException('delete error');
+    if (!verificationData) {
+      throw new NotFoundException('인증 데이터가 존재하지 않습니다.');
     }
+
+    verificationData.isComplete = true;
+
+    await this.redisRepository.set(`${this.EMAIL_VERIFICATION_ENDPOINT}:${email}`, verificationData);
   }
 }

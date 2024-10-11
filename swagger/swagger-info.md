@@ -4,7 +4,7 @@
 
 현재 버전: 1.0.1
 
-자세한 버전 이력은 [version-log](/version-log)를 참조하세요.
+자세한 버전 이력은 [version-log](/api/version-log)를 참조하세요.
 
 ---
 

@@ -14,7 +14,7 @@ export class AppController {
       throw new NotFoundException('Cannot GET /version-log');
     }
 
-    const filePath = join(__dirname, '..', 'swagger', 'swagger-version-log.md');
+    const filePath = join(__dirname, '..', '..', '..', '..', 'swagger', 'swagger-version-log.md');
     const content = await readFile(filePath, { encoding: 'utf-8' });
 
     return `

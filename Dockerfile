@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /your-wavelength
+WORKDIR /nestjs-ddd
 
 COPY package*.json ./
 

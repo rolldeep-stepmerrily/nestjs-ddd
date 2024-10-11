@@ -1,17 +1,8 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsString, Length } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail } from 'class-validator';
 
-import { User } from 'src/domain/user/entities/user.entity';
-
-export class RequestEmailVerificationDto extends PickType(User, ['email']) {}
-
-export class CompleteEmailVerificationDto extends PickType(User, ['email']) {
-  @ApiProperty({ description: '인증 코드', required: true, example: '123456' })
-  @IsString()
-  @Length(6)
-  code: string;
+export class RequestEmailVerificationDto {
+  @ApiProperty({ description: '이메일', required: true, example: 'abcd@example.com' })
+  @IsEmail()
+  email: string;
 }
-
-export class CreateUserDto extends PickType(User, ['email', 'name', 'password']) {}
-
-export class SignInUserDto extends PickType(User, ['email', 'password']) {}

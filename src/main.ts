@@ -16,6 +16,8 @@ import { HttpExceptionFilter } from './shared/filters';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.setGlobalPrefix('api');
+
   const configService = app.get(ConfigService);
 
   const isProduction = configService.getOrThrow<string>('NODE_ENV') === 'production';

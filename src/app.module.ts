@@ -1,22 +1,14 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
-import { CacheModule } from '@nestjs/cache-manager';
-import { RedisClientOptions } from 'redis';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { redisStore } from 'cache-manager-redis-yet';
 
 import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
 import { HttpLoggerMiddleware } from './shared/middlewares';
-import { AppController } from './application/controllers/app.controller';
+import { AppController } from './interfaces/http/controllers/app.controller';
 import { ConfigProviderModule } from './shared/config-provider';
-import { UserModule } from './infrastructure/modules/user.module';
-import {
-  REDIS_HOST_PROVIDER,
-  REDIS_PASSWORD_PROVIDER,
-  REDIS_PORT_PROVIDER,
-} from './shared/config-provider/config.provider';
-import { RedisModule } from './infrastructure/database/redis/redis.module';
+import { UserModule } from './interfaces/modules/user.module';
+import { RedisModule } from './infrastructure/cache/redis/redis.module';
 
 @Module({
   imports: [

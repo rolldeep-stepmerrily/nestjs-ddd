@@ -5,7 +5,6 @@ import { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-yet';
 
 import { RedisService } from './redis.service';
-import { EmailVerificationRepository } from 'src/infrastructure/repositories/redis';
 
 @Module({
   imports: [
@@ -20,7 +19,7 @@ import { EmailVerificationRepository } from 'src/infrastructure/repositories/red
       inject: [ConfigService],
     }),
   ],
-  providers: [RedisService, EmailVerificationRepository],
-  exports: [RedisService, EmailVerificationRepository],
+  providers: [RedisService],
+  exports: [RedisService],
 })
 export class RedisModule {}

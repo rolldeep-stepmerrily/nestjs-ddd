@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsString, Length } from 'class-validator';
 
-import { User } from 'src/domain/entities';
+import { User } from 'src/domain/user/entities/user.entity';
 
 export class RequestEmailVerificationDto extends PickType(User, ['email']) {}
 

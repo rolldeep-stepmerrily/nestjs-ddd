@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { EmailVerificationService } from 'src/application/user/services/email-verification.service';
-import { CompleteEmailVerificaitonDto, RequestEmailVerificationDto } from '../dto/user.dto';
+import { CompleteEmailVerificaitonDto, RequestEmailVerificationDto } from 'src/modules/user/dto/user.request.dto';
 
 @ApiTags('users')
 @Controller('users')

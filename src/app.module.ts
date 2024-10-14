@@ -3,12 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
-import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
+import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { HttpLoggerMiddleware } from './shared/middlewares';
-import { AppController } from './interfaces/http/controllers/app.controller';
+import { AppController } from './api/app.controller';
 import { ConfigProviderModule } from './shared/config-provider';
-import { UserModule } from './interfaces/modules/user.module';
-import { RedisModule } from './infrastructure/cache/redis/redis.module';
+import { RedisModule } from './infrastructure/redis/redis.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [

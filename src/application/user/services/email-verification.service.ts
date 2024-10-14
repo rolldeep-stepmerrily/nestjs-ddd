@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
-import { RedisService } from 'src/infrastructure/cache/redis/redis.service';
+import { RedisService } from 'src/infrastructure/redis/redis.service';
 import { EmailService } from 'src/infrastructure/email/email.service';
 
 @Injectable()

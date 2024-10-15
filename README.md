@@ -5,6 +5,7 @@ NestJS DDD 연습 프로젝트
 
 #### 2024-10-15 15:03
 1. Aggregate, Domain Event, Bounded Context 좀 더 이해하고 적용 시켜볼 것.
+2. Request DTO에 있는 class validator가 잘못된 값을 가져오면 바로 쳐내는데, 수정사항 있을지 확인할 것.
 
 #### 2024-10-11 16:31
 1. 전체 디렉토리 구조 리팩터링

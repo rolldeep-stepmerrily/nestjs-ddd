@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Either } from 'effect';
+import { isRight } from 'effect/Either';
 
 import { UserRepository } from 'src/domain/user/repositories';
 import { CreateUserCommand } from '../create-user.command';
@@ -50,9 +50,10 @@ describe('CreateUserCommand', () => {
       userRepositoryMock.createUser.mockResolvedValue(new User({ id: 'user-id', ...validDto } as any));
 
       const result = await createUserCommand.execute(validDto);
+      const resultIsRight = isRight(result);
 
-      expect(Either.isRight(result)).toBe(true);
-      if (Either.isRight(result)) {
+      expect(resultIsRight).toBe(true);
+      if (resultIsRight) {
         expect(result.right).toBeInstanceOf(CreateUserResponseDto);
         expect(result.right.id).toBe('user-id');
       }

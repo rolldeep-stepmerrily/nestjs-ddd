@@ -1,5 +1,13 @@
-import { BadRequestException, Body, Controller, InternalServerErrorException, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  ConflictException,
+  Controller,
+  InternalServerErrorException,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { isLeft } from 'effect/Either';
 
 import { EmailVerificationService } from 'src/application/user/services/email-verification.service';
 import {
@@ -8,8 +16,7 @@ import {
   RequestEmailVerificationDto,
 } from '../dto/request/user.request.dto';
 import { CreateUserCommand } from 'src/application/user/commands';
-import { Either } from 'effect';
-import { DuplicateEmailError, UserCreationError } from 'src/domain/user/exceptions/domain-exceptions';
+import { EmailError, UnknownError } from 'src/domain/user/exceptions/domain-exceptions';
 
 @ApiTags('users')
 @Controller('users')
@@ -36,19 +43,17 @@ export class UserController {
   async createUser(@Body() createUserDto: CreateUserDto) {
     const createUser = await this.createUserCommand.execute(createUserDto);
 
-    if (Either.isLeft(createUser)) {
-      const error = createUser.left;
+    if (isLeft(createUser)) {
+      switch (createUser.left) {
+        case EmailError.DuplicateEmail:
+          throw new ConflictException(createUser.left);
 
-      switch (error.constructor) {
-        case DuplicateEmailError:
-          throw new BadRequestException(error.message);
-        case UserCreationError:
-          throw new InternalServerErrorException(error.message);
+        case UnknownError.UnexpectedError:
+          throw new InternalServerErrorException('알 수 없는 오류가 발생했습니다.');
+
         default:
-          throw new Error('알 수 없는 오류가 발생했습니다.');
+          throw new BadRequestException(createUser.left);
       }
     }
-
-    return createUser.right;
   }
 }

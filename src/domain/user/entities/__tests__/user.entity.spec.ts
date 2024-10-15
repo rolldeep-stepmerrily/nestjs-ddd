@@ -1,4 +1,5 @@
 import { Right } from 'effect/Either';
+
 import { Email, Name, Password } from '../../value-objects';
 import { User } from '../user.entity';
 
@@ -9,13 +10,19 @@ describe('User', () => {
 
   beforeAll(async () => {
     const validEmail = 'rolldeep@stepmerrily.com';
-    email = (Email.create(validEmail) as Right<never, Email>).right;
+    const emailResult = Email.create(validEmail);
+
+    email = (emailResult as Right<never, Email>).right;
 
     const validName = '이영우';
-    name = (Name.create(validName) as Right<never, Name>).right;
+    const nameResult = Name.create(validName);
+
+    name = (nameResult as Right<never, Name>).right;
 
     const validPassword = 'qwer1234!';
-    password = ((await Password.create(validPassword)) as Right<never, Password>).right;
+    const passwordResult = await Password.create(validPassword);
+
+    password = (passwordResult as Right<never, Password>).right;
   });
 
   it('유효한 UserProps 값으로 User를 생성할 수 있어야 한다.', () => {

@@ -1,13 +1,19 @@
-export class DuplicateEmailError extends Error {
-  constructor(email: string) {
-    super(`Email : ${email} 은 이미 사용 중인 이메일 입니다.`);
-    this.name = 'DuplicateEmailError';
-  }
-}
+export const UnknownError = {
+  UnexpectedError: 'Unexpected error',
+};
 
-export class UserCreationError extends Error {
-  constructor() {
-    super('사용자 생성에 실패했습니다.');
-    this.name = 'UserCreationError';
-  }
-}
+export const EmailError = {
+  EmailIsRequired: 'Email is required',
+  InvalidEmail: 'Invalid email',
+  DuplicateEmail: 'Duplicate email',
+};
+
+export const NameError = {
+  NameIsRequired: 'Name is required',
+  InvalidName: 'Invalid name',
+} as const;
+
+export const PasswordError = {
+  PasswordIsRequired: 'Password is required',
+  InvalidPassword: 'Invalid password',
+} as const;

@@ -1,15 +1,16 @@
-import { BadRequestException } from '@nestjs/common';
-import { IsString, Length, validateSync } from 'class-validator';
+import { IsNotEmpty, Length, validateSync } from 'class-validator';
 import { Either } from 'effect';
+import { left, right } from 'effect/Either';
 
 import { ValueObject } from 'src/shared/domain';
+import { NameError } from '../exceptions/domain-exceptions';
 
 interface NameProps {
   value: string;
 }
 
 export class Name extends ValueObject<NameProps> {
-  @IsString()
+  @IsNotEmpty()
   @Length(2, 10)
   get name(): string {
     return this.props.value;
@@ -19,14 +20,22 @@ export class Name extends ValueObject<NameProps> {
     super(nameProps);
   }
 
-  static create(name: string): Either.Either<BadRequestException, Name> {
+  static create(name: string): Either.Either<string, Name> {
     const nameInstance = new Name({ value: name });
     const errors = validateSync(nameInstance);
 
     if (errors.length > 0) {
-      return Either.left(new BadRequestException(errors));
+      const error = errors[0].constraints;
+
+      if (error?.isLength) {
+        return left(NameError.InvalidName);
+      }
+
+      if (error?.isNotEmpty) {
+        return left(NameError.NameIsRequired);
+      }
     }
 
-    return Either.right(nameInstance);
+    return right(nameInstance);
   }
 }

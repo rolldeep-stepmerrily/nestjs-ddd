@@ -1,29 +1,28 @@
 import { BadRequestException } from '@nestjs/common';
 import { IsEmail, validateSync } from 'class-validator';
-import { left, right } from 'effect/Either';
+import { Either } from 'effect';
 
 interface EmailProps {
   value: string;
 }
 
-export class EmailVO {
+export class Email {
   @IsEmail()
   private readonly value: string;
 
   private constructor(props: EmailProps) {
-    console.log(props.value);
     this.value = props.value;
   }
 
-  static create(email: string) {
-    const emailInstance = new EmailVO({ value: email });
+  static create(email: string): Either.Either<BadRequestException, Email> {
+    const emailInstance = new Email({ value: email });
     const errors = validateSync(emailInstance);
-    if (errors.length) {
-      console.log(errors);
-      return left(new BadRequestException(errors));
+
+    if (errors.length > 0) {
+      return Either.left(new BadRequestException(errors));
     }
 
-    return right(emailInstance);
+    return Either.right(emailInstance);
   }
 
   get email(): string {

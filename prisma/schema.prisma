@@ -16,7 +16,7 @@ model User {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
-  likes     Song[]     @relation("UserLikes")
+  songs     Song[]     @relation("UserLikes")
   playlists Playlist[]
 }
 
@@ -33,7 +33,7 @@ model Song {
 
   artist    Artist     @relation(fields: [artistId], references: [id])
   genre     Genre      @relation(fields: [genreId], references: [id])
-  likedBy   User[]     @relation("UserLikes")
+  users     User[]     @relation("UserLikes")
   playlists Playlist[] @relation("PlaylistSongs")
 }
 

@@ -1,22 +1,26 @@
-import { BadRequestException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Either } from 'effect';
 
-import { CreateUserResponseDto } from 'src/modules/user/dto/user.response.dto';
-import { User, UserProps } from 'src/modules/user/entities/user.entity';
-import { UserRepository } from 'src/modules/user/repositories';
-import { Email, Name, Password } from 'src/modules/user/value-objects';
+import { USER_REPOSITORY } from 'src/shared/constants/injection-tokens';
+import { CreateUserCommandDto } from 'src/domain/user/dto/user.dto';
+import { User } from 'src/domain/user/entities/user.entity';
+import { UserRepository } from 'src/domain/user/repositories';
+import { Email, Name, Password } from 'src/domain/user/value-objects';
+import { CheckEmailExistsQuery } from '../queries';
+import { CreateUserResponseDto } from 'src/interfaces/api/dto/response';
+import { DuplicateEmailError, UserCreationError } from 'src/domain/user/exceptions/domain-exceptions';
 
-export type CreateUserArgs = {
-  [K in keyof UserProps]: string;
-};
+@Injectable()
+export class CreateUserCommand {
+  constructor(
+    @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository,
+    private readonly checkEmailExistsQuery: CheckEmailExistsQuery,
+  ) {}
 
-export class CreateUser {
-  constructor(private readonly userRepository: UserRepository) {}
-
-  async execute(args: CreateUserArgs) {
-    const emailOrError = Email.create(args.email);
-    const nameOrError = Name.create(args.name);
-    const passwordOrError = await Password.create(args.password);
+  async execute(createUserCommandDto: CreateUserCommandDto) {
+    const emailOrError = Email.create(createUserCommandDto.email);
+    const nameOrError = Name.create(createUserCommandDto.name);
+    const passwordOrError = await Password.create(createUserCommandDto.password);
 
     const propsOrError = Either.all([emailOrError, nameOrError, passwordOrError]);
 
@@ -26,10 +30,10 @@ export class CreateUser {
 
     const [email, name, password] = propsOrError.right;
 
-    const isEmailExisting = await this.userRepository.checkEmailExists(email.email);
+    const isEmailExisting = await this.checkEmailExistsQuery.execute(email.props.value);
 
     if (isEmailExisting) {
-      return Either.left(new BadRequestException('중복된 이메일입니다.'));
+      return Either.left(new DuplicateEmailError(email.props.value));
     }
 
     const user = new User({ email, name, password });
@@ -37,7 +41,7 @@ export class CreateUser {
     const newUser = await this.userRepository.createUser(user);
 
     if (!newUser || !newUser.props.id) {
-      return Either.left(new BadRequestException('사용자 생성에 실패했습니다.'));
+      return Either.left(new UserCreationError());
     }
 
     return Either.right(new CreateUserResponseDto(newUser.props.id));

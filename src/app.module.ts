@@ -5,10 +5,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { HttpLoggerMiddleware } from './shared/middlewares';
-import { AppController } from './api/app.controller';
+import { AppController } from './interfaces/api/controllers/app.controller';
 import { ConfigProviderModule } from './shared/config-provider';
 import { RedisModule } from './infrastructure/redis/redis.module';
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from './domain/user/user.module';
 
 @Module({
   imports: [

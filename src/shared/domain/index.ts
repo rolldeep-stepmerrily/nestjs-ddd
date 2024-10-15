@@ -1,3 +1,3 @@
-export { EntityClass, Entity } from './Entity';
-export { ValueObject } from './ValueObject';
-export { Identifier } from './Identifier';
+export { EntityClass, Entity } from './entity';
+export { ValueObject } from './value-object';
+export { Identifier } from './identifier';

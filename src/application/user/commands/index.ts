@@ -1,1 +1,1 @@
-export { CreateUser } from './create-user.command';
+export { CreateUserCommand } from './create-user.command';

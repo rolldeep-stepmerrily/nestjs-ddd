@@ -3,6 +3,9 @@ NestJS DDD 연습 프로젝트
 
 ## Memo
 
+#### 2024-10-15 15:03
+1. Aggregate, Domain Event, Bounded Context 좀 더 이해할 것.
+
 #### 2024-10-11 16:31
 1. 전체 디렉토리 구조 리팩터링
 

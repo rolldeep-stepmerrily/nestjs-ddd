@@ -2,16 +2,20 @@ import { BadRequestException } from '@nestjs/common';
 import { IsEmail, validateSync } from 'class-validator';
 import { Either } from 'effect';
 
+import { ValueObject } from 'src/shared/domain';
+
 interface EmailProps {
   value: string;
 }
 
-export class Email {
+export class Email extends ValueObject<EmailProps> {
   @IsEmail()
-  private readonly value: string;
+  get email(): string {
+    return this.props.value;
+  }
 
-  private constructor(props: EmailProps) {
-    this.value = props.value;
+  private constructor(emailProps: EmailProps) {
+    super(emailProps);
   }
 
   static create(email: string): Either.Either<BadRequestException, Email> {
@@ -23,9 +27,5 @@ export class Email {
     }
 
     return Either.right(emailInstance);
-  }
-
-  get email(): string {
-    return this.value;
   }
 }

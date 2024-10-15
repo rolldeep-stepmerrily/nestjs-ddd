@@ -40,11 +40,11 @@ async function bootstrap() {
   if (isProduction) {
     app.use(helmet());
   } else {
-    app.use(express.static(join(__dirname, '..', 'swagger')));
+    app.use(express.static(join(__dirname, '..', '..', 'swagger')));
 
-    app.useStaticAssets(join(__dirname, '..', 'swagger'), { prefix: '/swagger/' });
+    app.useStaticAssets(join(__dirname, '..', '..', 'swagger'), { prefix: '/swagger/' });
 
-    const updateInfo = fs.readFileSync(join(__dirname, '..', 'swagger', 'swagger-info.md'), 'utf8');
+    const updateInfo = fs.readFileSync(join(__dirname, '..', '..', 'swagger', 'swagger-info.md'), 'utf8');
 
     const GUEST_NAME = configService.getOrThrow<string>('GUEST_NAME');
     const GUEST_PASSWORD = configService.getOrThrow<string>('GUEST_PASSWORD');

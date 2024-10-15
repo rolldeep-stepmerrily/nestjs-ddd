@@ -1,5 +1,14 @@
 ### version log
 
+#### 1.0.2 (2024-10-15 12:22)
+
+1. User Entity 추가
+   1. Email, Name, Password ValueObject 추가
+   2. Test 추가
+2. Shared Domain(Entity,Identifier,UniqueEntityId,ValueObject) 추가
+
+***
+
 #### 1.0.1 (2024-10-11 17:34)
 
 1. 이메일 인증 요청 및 이메일 인증 완료 추가

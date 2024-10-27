@@ -25,13 +25,13 @@ describe('User', () => {
     password = (passwordResult as Right<never, Password>).right;
   });
 
-  it('유효한 UserProps 값으로 User를 생성할 수 있어야 한다.', () => {
+  it('should be able to create User with valid UserProps', () => {
     const user = new User({ email, name, password });
 
     expect(user).toBeDefined();
   });
 
-  it('두 유저를 비교하기', () => {
+  it('should return true when comparing two users with same id', () => {
     const user1 = new User({ id: 1, email, name, password });
 
     const user2 = new User({ id: 1, email, name, password });
